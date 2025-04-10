@@ -1,8 +1,11 @@
 import cv2
 import os
 import shutil
+from fastapi import FastAPI
 
-def recording(output_file = 'output.mp4'):
+
+@app.post("/record")
+def recording():
     camera = cv2.VideoCapture(0) #Sets up the camera
     camera.set(cv2.CAP_PROP_FRAME_WIDTH, 1920) # Makes camera makes resolution
     camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
@@ -22,9 +25,10 @@ def recording(output_file = 'output.mp4'):
     camera.release()
     out.release()
     cv2.destroyAllWindows()
+    return {"message": "recorded"}
 
 
-
+@app.post("/frames")
 def framesInVideo():
 
     if os.path.exists("frames"):
@@ -45,10 +49,8 @@ def framesInVideo():
         frames_count += 1
     recording.release()
     cv2.destroyAllWindows()
+    return {"message": f"{count} frames checked"}
 
-        
-recording(output_file= "output.mp4") #Calls the function
-framesInVideo() #Returns the frames in the videos as part of a directory called frame
 
 
 

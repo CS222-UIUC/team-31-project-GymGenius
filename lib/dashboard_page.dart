@@ -6,7 +6,7 @@ class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: const Color.fromARGB(255, 245, 245, 245),
       appBar: AppBar(
         title: const Text('Muscle Map'),
         centerTitle: true,
@@ -55,19 +55,75 @@ class DashboardPage extends StatelessWidget {
               child: Stack(
                 children: [
                   // Chest and Back
-                  _buildMuscleZone(context, 'Chest', Colors.amber, 120, 80, 80, 50),
-                  _buildMuscleZone(context, 'Back', Colors.brown, 120, 80, 80, 90),
-                  
+                  _buildMuscleZone(
+                    context,
+                    'Chest',
+                    Colors.amber,
+                    120,
+                    80,
+                    80,
+                    50,
+                  ),
+                  _buildMuscleZone(
+                    context,
+                    'Back',
+                    Colors.brown,
+                    120,
+                    80,
+                    80,
+                    90,
+                  ),
+
                   // Arms
-                  _buildMuscleZone(context, 'Left Arm', Colors.blue, 40, 100, 50, 100),
-                  _buildMuscleZone(context, 'Right Arm', Colors.blue, 40, 100, 190, 100),
-                  
+                  _buildMuscleZone(
+                    context,
+                    'Left Arm',
+                    Colors.blue,
+                    40,
+                    100,
+                    50,
+                    100,
+                  ),
+                  _buildMuscleZone(
+                    context,
+                    'Right Arm',
+                    Colors.blue,
+                    40,
+                    100,
+                    190,
+                    100,
+                  ),
+
                   // Core
-                  _buildMuscleZone(context, 'Abs', Colors.green, 100, 60, 90, 150),
-                  
+                  _buildMuscleZone(
+                    context,
+                    'Abs',
+                    Colors.green,
+                    100,
+                    60,
+                    90,
+                    150,
+                  ),
+
                   // Legs
-                  _buildMuscleZone(context, 'Left Leg', Colors.purple, 50, 120, 80, 200),
-                  _buildMuscleZone(context, 'Right Leg', Colors.purple, 50, 120, 150, 200),
+                  _buildMuscleZone(
+                    context,
+                    'Left Leg',
+                    Colors.purple,
+                    50,
+                    120,
+                    80,
+                    200,
+                  ),
+                  _buildMuscleZone(
+                    context,
+                    'Right Leg',
+                    Colors.purple,
+                    50,
+                    120,
+                    150,
+                    200,
+                  ),
                 ],
               ),
             ),
@@ -104,18 +160,19 @@ class DashboardPage extends StatelessWidget {
             border: visible ? Border.all(color: color, width: 2) : null,
             borderRadius: BorderRadius.circular(8),
           ),
-          child: visible
-              ? Center(
-                  child: Text(
-                    name.split(' ').first,
-                    style: TextStyle(
-                      color: color,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12,
+          child:
+              visible
+                  ? Center(
+                    child: Text(
+                      name.split(' ').first,
+                      style: TextStyle(
+                        color: color,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
                     ),
-                  ),
-                )
-              : null,
+                  )
+                  : null,
         ),
       ),
     );
@@ -136,24 +193,28 @@ class DashboardPage extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: muscles.entries.map((entry) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: entry.value.withOpacity(0.2),
-                foregroundColor: entry.value,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  side: BorderSide(color: entry.value),
+        children:
+            muscles.entries.map((entry) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: entry.value.withValues(alpha: (0.1 * 255)),
+                    foregroundColor: entry.value,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      side: BorderSide(color: entry.value),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                  ),
+                  onPressed: () => _highlightMuscle(context, entry.key),
+                  child: Text(entry.key),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              ),
-              onPressed: () => _highlightMuscle(context, entry.key),
-              child: Text(entry.key),
-            ),
-          );
-        }).toList(),
+              );
+            }).toList(),
       ),
     );
   }
@@ -173,37 +234,38 @@ class DashboardPage extends StatelessWidget {
   void _showMuscleDetails(BuildContext context, String muscle, Color color) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(muscle, style: TextStyle(color: color)),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text('Current Rank:'),
-            const SizedBox(height: 8),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-              decoration: BoxDecoration(
-                color: color.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: color),
-              ),
-              child: Text(
-                _getRankFromColor(color),
-                style: TextStyle(
-                  color: color,
-                  fontWeight: FontWeight.bold,
+      builder:
+          (context) => AlertDialog(
+            title: Text(muscle, style: TextStyle(color: color)),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text('Current Rank:'),
+                const SizedBox(height: 8),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: color.withValues(alpha: (0.1 * 255)),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: color),
+                  ),
+                  child: Text(
+                    _getRankFromColor(color),
+                    style: TextStyle(color: color, fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Close'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Close'),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 
@@ -257,31 +319,24 @@ class DashboardPage extends StatelessWidget {
               borderRadius: BorderRadius.circular(4),
             ),
           ),
-          Text(
-            muscle,
-            style: const TextStyle(fontWeight: FontWeight.w500),
-          ),
+          Text(muscle, style: const TextStyle(fontWeight: FontWeight.w500)),
           const Spacer(),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             decoration: BoxDecoration(
-              color: rankColor.withOpacity(0.2),
+              color: rankColor.withValues(alpha: (0.2 * 255)),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: rankColor),
             ),
             child: Text(
               rank,
-              style: TextStyle(
-                color: rankColor,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(color: rankColor, fontWeight: FontWeight.bold),
             ),
           ),
         ],
       ),
     );
   }
-  
 
   Widget _buildMuscleRankingsSection() {
     return Container(
@@ -305,10 +360,7 @@ class DashboardPage extends StatelessWidget {
             children: [
               Text(
                 'Muscle Rankings ',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               Icon(Icons.sentiment_satisfied_alt, color: Colors.amber),
             ],
@@ -342,17 +394,28 @@ class DashboardPage extends StatelessWidget {
 class _BodyPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.grey[200]!
-      ..style = PaintingStyle.fill;
+    // variables for use
+    final paint =
+        Paint()
+          ..color = Colors.grey[200]!
+          ..style = PaintingStyle.fill;
+    final centerX = size.width / 2;
+    final centerY = size.height / 2;
+    final torsoWidth = 100.0;
+    final torsoHeight = 160.0;
+    final headRadius = 30.0;
+    final armWidth = 35.0;
+    final armHeight = 135.0;
+    final legWidth = 40.0;
+    final legHeight = 120.0;
 
     // Draw torso
     canvas.drawRRect(
       RRect.fromRectAndRadius(
         Rect.fromCenter(
-          center: Offset(size.width / 2, size.height / 2 - 20),
-          width: 120,
-          height: 180,
+          center: Offset(centerX, centerY - 20),
+          width: torsoWidth,
+          height: torsoHeight,
         ),
         const Radius.circular(20),
       ),
@@ -360,23 +423,29 @@ class _BodyPainter extends CustomPainter {
     );
 
     // Draw head
-    canvas.drawCircle(
-      Offset(size.width / 2, 40),
-      20,
-      paint,
-    );
+    canvas.drawCircle(Offset(centerX, 20), headRadius, paint);
 
     // Draw arms
     canvas.drawRRect(
       RRect.fromRectAndRadius(
-        Rect.fromLTWH(30, 100, 40, 120),
+        Rect.fromLTWH(
+          centerX - (torsoWidth / 2) - armWidth - 2,
+          centerY - 20 - (torsoHeight / 2) + 8,
+          armWidth,
+          armHeight,
+        ),
         const Radius.circular(20),
       ),
       paint,
     );
     canvas.drawRRect(
       RRect.fromRectAndRadius(
-        Rect.fromLTWH(size.width - 70, 100, 40, 120),
+        Rect.fromLTWH(
+          centerX + (torsoWidth / 2) + 2,
+          centerY - 20 - (torsoHeight / 2) + 8,
+          armWidth,
+          armHeight,
+        ),
         const Radius.circular(20),
       ),
       paint,
@@ -385,15 +454,20 @@ class _BodyPainter extends CustomPainter {
     // Draw legs
     canvas.drawRRect(
       RRect.fromRectAndRadius(
-        Rect.fromLTWH(60, 200, 50, 140),
-        const Radius.circular(20),
+        Rect.fromLTWH(centerX - (torsoWidth / 2), 210, legWidth, legHeight),
+        const Radius.circular(10),
       ),
       paint,
     );
     canvas.drawRRect(
       RRect.fromRectAndRadius(
-        Rect.fromLTWH(size.width - 110, 200, 50, 140),
-        const Radius.circular(20),
+        Rect.fromLTWH(
+          centerX + (torsoWidth / 2) - legWidth,
+          210,
+          legWidth,
+          legHeight,
+        ),
+        const Radius.circular(10),
       ),
       paint,
     );
@@ -402,3 +476,5 @@ class _BodyPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
+
+
