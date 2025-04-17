@@ -2,13 +2,18 @@ import cv2
 import os
 import shutil
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
-
-<<<<<<< Updated upstream
-=======
 app = FastAPI()
 
->>>>>>> Stashed changes
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
+
 @app.post("/record")
 def recording():
     camera = cv2.VideoCapture(0) #Sets up the camera
