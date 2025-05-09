@@ -361,10 +361,6 @@ class _RecordPageState extends State<RecordPage> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  _currentUser?.uid.substring(0, 8) ?? 'No UID',
-                  style: const TextStyle(fontSize: 12),
-                ),
-                Text(
                   _userEmail,
                   style: const TextStyle(fontSize: 12),
                 ),
