@@ -273,16 +273,20 @@ class _RecordPageState extends State<RecordPage> {
   }
 
   Widget _cameraPreview() {
-    if (!_isCameraReady) {
+    if (!_isCameraReady || _cameraController == null) {
       return const Center(child: CircularProgressIndicator());
     }
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(16),
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.8,
-        height: MediaQuery.of(context).size.width * 0.8 * (9 / 16),
-        child: CameraPreview(_cameraController!),
-      ),
+    
+    // Get the screen size
+    final size = MediaQuery.of(context).size;
+    
+    // Get the camera's aspect ratio
+    final cameraAspectRatio = _cameraController!.value.aspectRatio;
+    
+    // Calculate the correct preview size
+    return AspectRatio(
+      aspectRatio: cameraAspectRatio,
+      child: CameraPreview(_cameraController!),
     );
   }
 
@@ -290,16 +294,10 @@ class _RecordPageState extends State<RecordPage> {
     if (_videoController == null || !_videoController!.value.isInitialized) {
       return Container();
     }
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(16),
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.8,
-        height: MediaQuery.of(context).size.width * 0.8 * (9 / 16),
-        child: AspectRatio(
-          aspectRatio: _videoController!.value.aspectRatio,
-          child: VideoPlayer(_videoController!),
-        ),
-      ),
+  
+    return AspectRatio(
+      aspectRatio: _videoController!.value.aspectRatio,
+      child: VideoPlayer(_videoController!),
     );
   }
 
@@ -380,11 +378,15 @@ class _RecordPageState extends State<RecordPage> {
 
           Expanded(
             child: Center(
-              child:
-                  _videoController != null &&
-                          _videoController!.value.isInitialized
-                      ? _videoPreview()
-                      : _cameraPreview(),
+              child: Container(
+                constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width * 0.9,
+                  maxHeight: MediaQuery.of(context).size.height * 0.6,
+                ),
+                child: _videoController != null && _videoController!.value.isInitialized
+                    ? _videoPreview()
+                    : _cameraPreview(),
+              ),
             ),
           ),
 
